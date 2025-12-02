@@ -51,5 +51,5 @@ DEBUG = False
 - Add reference metadata  
 
 ## Authors
-Swetang Krishna
+Swetang Krishna,
 Yannis Belkhiter
