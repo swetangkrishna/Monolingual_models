@@ -14,11 +14,11 @@ monolingual_llms/
 ├── references_check.py
 ├── main_rubric.py
 │
-├── answers/
-│   ├── gpt-5.1(RQ1).txt
-│   ├── gpt-5.1(RQ2).txt
-│   ├── deepseek-R1(RQ1).txt
-│   └── deepseek-R1(RQ2).txt
+├
+│── gpt-5.1(RQ1).txt
+│── gpt-5.1(RQ2).txt
+│── deepseek-R1(RQ1).txt
+│── deepseek-R1(RQ2).txt
 │
 ├── rubric_results_RQ1_RQ2.json
 └── README.md
