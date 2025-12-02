@@ -1,0 +1,138 @@
+1. What is a lexical gap in this context?
+
+A lexical gap is a concept that is lexicalised (has a concise word or fixed phrase) in one language but not in another. Classic examples include culture-specific emotion terms or kinship relations that require paraphrases in other languages. Lexical semantic resources and lexicons are known to systematically miss such concepts, especially for non-English languages, and recent work (e.g. LingoGap / crowdsourced lexical gaps) explicitly documents how common these “untranslatable” concepts are.  ￼
+
+For language models (LMs), this means that the mapping from real-world concepts to tokens is uneven across languages: some ideas have short, well-established lexical entries in one language but only long or ad-hoc paraphrases in another.
+
+⸻
+
+2. Mechanisms: how lexical gaps affect reasoning in LMs
+
+Lexical gaps do not just cause translation errors; they interact with how LMs reason in several systematic ways.
+
+2.1. Noisy or lossy encoding of premises
+
+When a concept has no direct lexical equivalent, it must be paraphrased or approximated. This can:
+	•	Distort the premise (e.g., a culturally specific mourning practice explained as just “funeral ring”), leading the model to reason over an approximation rather than the intended concept. Multilingual lexical-semantic datasets explicitly note such culture-specific items as unavoidable sources of lexical gaps.  ￼
+	•	Introduce extra tokens and clauses, increasing the chance that the model latches onto the wrong detail, especially in long, multi-step reasoning prompts.
+
+Empirically, cross-lingual QA and NLI studies that deliberately exploit lexical gaps find both zero-shot and translation-based transfer methods struggle more on such items than on standard parallel data.  ￼
+
+2.2. Hidden “pivot languages” and internal code-switching
+
+Large multilingual models frequently reason internally in a high-resource “pivot” language (often English or Chinese), even when the input and requested output are in another language:
+	•	MGSM and follow-up analyses show that models can solve math problems across many languages, but chain-of-thought traces often drift into English or another high-resource language mid-reasoning, even when given native-language CoT examples.  ￼
+	•	Work on multilingual chain-of-thought and cross-lingual prompting shows that choosing the “thinking language” (the language of the intermediate reasoning) significantly affects accuracy; some languages clearly behave as more effective reasoning pivots.  ￼
+
+Human bilinguals similarly code-switch to “fill lexical gaps” and reduce cognitive load during complex tasks, a phenomenon well-documented in bilingual children and adults.  ￼
+
+For LMs, lexical gaps encourage this behaviour: if a concept is better lexicalised in English than in Swahili, the model has an incentive (via training statistics) to “think in English” at key steps. This affects:
+	•	Where reasoning errors happen (often at the language switch boundaries),
+	•	Interpretability (the chain-of-thought contains mixed languages),
+	•	And fairness (users of some languages effectively get “second-class” reasoning because the model is more comfortable in a pivot language).
+
+2.3. Misaligned lexical-semantic spaces
+
+Lexical gaps also signal non-isomorphic lexical fields across languages: synonyms, antonyms, and hypernyms do not line up one-to-one. Cross-lingual embeddings and transfer studies show that:
+	•	Lexical semantic differences and gaps can reduce cross-lingual transfer performance beyond what is explained by data size alone.  ￼
+	•	Lexical semantic resources and benchmarks (e.g. Multi-SimLex-style evaluations, multilingual lexical-relation datasets) document many concepts where no clean counterpart exists, and models must “stretch” a nearby word to cover multiple senses.  ￼
+
+In reasoning tasks (math word problems, commonsense reasoning, semantic judgment), this misalignment can manifest as:
+	•	Incorrect commonsense entailment because the nearest lexical neighbour has different connotations,
+	•	Wrong analogy mappings (e.g., kinship or emotion concepts that map differently across languages),
+	•	Over-reliance on surface lexical overlap instead of deeper semantic structure when lexical cues are misleading.  ￼
+
+2.4. Longer descriptions & “reasoning budget”
+
+When there is a lexical gap, the concept must be explained with a phrase or sentence. This has two side-effects for LMs:
+	1.	More tokens → more opportunities for error in long chain-of-thought traces.
+	2.	Diffused attention: the key concept is no longer anchored in a single, high-frequency token but spread across several lower-frequency ones.
+
+Benchmarks such as MGSM, XCOPA, and cross-lingual math / factual reasoning tasks consistently find that, even for the same underlying problem, languages that require more verbose paraphrases or awkward explanations tend to show lower accuracy and more fragile CoT trajectories.  ￼
+
+⸻
+
+3. Evidence from multilingual reasoning benchmarks
+
+MGSM and multilingual math reasoning.
+Shi et al. introduce MGSM by translating grade-school math problems into 10 typologically diverse languages and show that large LMs exhibit strong but uneven multilingual reasoning performance.  ￼
+
+Subsequent work:
+	•	Shows persistent performance gaps across languages, some of which correlate with linguistic characteristics and data availability, but also with how concisely mathematical concepts can be expressed.  ￼
+	•	Finds that allowing the model to reason in a pivot language (via cross-lingual CoT or translation-then-reason pipelines) often improves accuracy for low-resource or lexically misaligned languages, suggesting that lexical gaps in those languages make within-language reasoning harder.  ￼
+
+Beyond math: commonsense and factual reasoning.
+Multilingual chain-of-thought approaches achieve large gains on cross-lingual commonsense benchmarks like XCOPA, again with substantial variation by language and with English CoT often outperforming native-language CoT for some languages.  ￼
+
+This pattern indicates that the reasoning “engine” itself is relatively language-agnostic, but:
+	•	It is bottlenecked by the lexical interface in languages where gaps and semantic mismatches are common.
+	•	LMs exploit languages with richer, more fine-grained lexicalisation (typically those with most training data and best lexical resources) as internal reasoning media.
+
+⸻
+
+4. How large is the impact relative to other factors?
+
+Recent controlled studies try to disentangle lexical semantics from morphology, syntax, and training data size:
+	•	Some find that morphology and syntax are strong predictors of cross-lingual transfer, sometimes stronger than simple lexical overlap.  ￼
+	•	Others isolate lexical-semantic factors (including gaps) and show that manipulating lexical semantics can substantially affect transfer success and robustness.  ￼
+
+The emerging consensus is:
+	•	Lexical gaps are not the only driver of cross-lingual performance differences,
+	•	But they are a non-negligible, systematic source of reasoning failures, especially for:
+	•	Culturally loaded concepts,
+	•	Fine-grained affect or stance,
+	•	Tasks where a single misinterpreted concept undermines the entire chain of reasoning (e.g., logic puzzles, legal reasoning, subtle QA).
+
+⸻
+
+5. How models and systems currently mitigate lexical gaps
+
+Several strands of work implicitly or explicitly address lexical gaps to improve reasoning:
+	1.	Cross-lingual CoT and “thinking language” optimisation
+Methods like cross-lingual prompting, AdaMCOT, and AUTOCAP dynamically select or weight languages for internal reasoning, often routing through English or another well-resourced language and then translating the final answer back.  ￼
+	2.	Lexicon enrichment and gap identification
+Crowdsourced gap-finding and lexicon enrichment (e.g., LingoGap, lexical diversity tools) systematically identify missing concepts and add them to multilingual resources, which can then be used for training or post-processing.  ￼
+	3.	Dictionary / lexicon-guided model adaptation
+Dictionary-based augmentation and cross-lingual vocabulary completion improve performance in lexically distant, low-resource languages, showing that better lexical coverage alone can close part of the multilingual reasoning gap.  ￼
+	4.	Allowing code-switching
+Allowing the model (and sometimes the user) to code-switch in prompts reflects natural bilingual behaviour of “filling lexical gaps”, and has been shown in both human and LM studies to reduce cognitive load and improve task success in some settings.  ￼
+
+⸻
+
+References
+	1.	Shi, F. et al. (2022). Language Models are Multilingual Chain-of-Thought Reasoners. ICLR.  ￼
+	2.	Chen, N. et al. (2024). Breaking Language Barriers in Multilingual Mathematical Reasoning. Findings of EMNLP.  ￼
+	3.	Ebrahimi, A. (2024). Zero-Shot vs. Translation-Based Cross-Lingual Transfer. NAACL.  ￼
+	4.	Qin, L. et al. (2023). Improving Zero-shot Chain-of-Thought Reasoning across Languages via Cross-lingual Prompting. EMNLP.  ￼
+	5.	Zhang, Y. et al. (2024). AUTOCAP: Towards Automatic Cross-lingual Alignment for Multilingual Chain-of-Thought. Findings of ACL.  ￼
+	6.	Gromann, D. et al. (2024). Multilingual Dataset of Lexical Semantic Relations. LREC.  ￼
+	7.	Khalilia, H. (2025). Crowdsourcing Lexical Diversity: Identifying Lexical Gaps for Lexicon Enrichment. Frontiers in AI.  ￼
+	8.	Eronen, J. et al. (2023). Zero-shot Cross-lingual Transfer Language Selection using Linguistic Similarity. Information Processing & Management.  ￼
+	9.	Müller, B. et al. (2023). Impact of Language Characteristics on Multi-Lingual Text-to-Text Transfer. PMLR.  ￼
+	10.	Tulloch, M. K. (2023). Filling Lexical Gaps and More: Code-switching for the Power of Expression by Young Bilinguals. Journal of Child Language.  ￼
+	11.	Hwang, J. (2025). Bridging the Gaps in Multilingual Reasoning (M2A / GeoFact-X Project Report). Online project report.  ￼
+	12.	Chen, L. et al. (2025). Bridging Resource Gaps in Cross-Lingual Sentiment Analysis. PLOS Digital Health.  ￼
+
+(You can expand or swap references depending on what your coursework allows; I’ve prioritised recent, directly relevant multilingual reasoning and lexical-gap work.)
+
+⸻
+
+Final Summary and Recommendation
+
+Summary.
+Lexical gaps matter for language-model reasoning because they break the smooth mapping between concepts and tokens. When a concept is easily lexicalised in one language but not another, models reasoning in the “gapful” language must work with paraphrases, approximations, or internal code-switching. Evidence from MGSM, multilingual commonsense benchmarks, and cross-lingual transfer studies shows that:
+	•	LMs often default to high-resource pivot languages for chain-of-thought when lexical coverage is better there.
+	•	Tasks that hinge on subtle lexical semantics or culture-specific concepts show larger performance drops in languages with more lexical gaps relative to English.
+	•	Enriching lexicons, optimising the internal “thinking language”, and allowing code-switching can measurably improve multilingual reasoning performance, especially in low-resource or typologically distant languages.  ￼
+
+Recommendation (for model and task design).
+	1.	Evaluate reasoning per language, not just on English.
+Use multilingual reasoning benchmarks (e.g. MGSM, XCOPA variants) to explicitly measure where lexical gaps degrade reasoning, rather than assuming English results generalise.
+	2.	Explicitly manage the “thinking language”.
+For high-stakes or complex tasks, consider prompts that:
+	•	Allow or encourage internal CoT in a high-resource language (then translate the final answer), or
+	•	Provide bilingual exemplars to let the model choose the most stable reasoning pathway.
+	3.	Invest in lexical resources and gap-filling for under-served languages.
+Incorporate dictionary-based augmentation, crowdsourced gap-finding, and enriched lexical semantic resources into training or adaptation pipelines to reduce representational asymmetries.
+	4.	Design user interfaces that tolerate code-switching.
+Since both humans and LMs naturally use code-switching to fill lexical gaps, interfaces that accept mixed-language input and show mixed-language CoT when helpful can improve usability without necessarily harming final answer quality.

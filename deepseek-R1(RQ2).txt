@@ -1,0 +1,110 @@
+Hmm, the user is working on a university coursework project about monolingual models and their performance on reasoning tasks across different languages. They have two research questions and want answers presented in a format that allows evaluation of linguistic clarity, scientific accuracy, and quality of references. I found many relevant and high-quality search results for this topic.
+
+Looking at the search results,  from arXiv provides excellent coverage of the multilingual reasoning gap in reasoning language models. It explains how models perform better in high-resource languages than low-resource ones, which directly relates to the user's question about language-dependent performance.  is also highly relevant as it directly investigates how reasoning methods perform across languages, showing that Chain-of-Thought works better in high-resource languages.
+
+ provides important insights about training language models to reason efficiently, which connects to the efficiency aspect of the user's question.  offers valuable information about language mixing in bilingual LLM reasoning, showing that models can strategically switch languages during reasoning.
+
+ provides an interesting cognitive science perspective on how thinking in a foreign language affects reasoning in humans, which could offer useful parallels for understanding model behavior.  shows that language models, like humans, show content effects on reasoning.
+
+The other search results  are less directly relevant to the specific questions about monolingual models and reasoning across languages, though they contain some related information.
+
+I will structure the answer around the user's requirements with two clear research question sections followed by references. For RQ1, I will focus on performance disparities between high and low-resource languages, drawing from . For RQ2, I will discuss both inference efficiency and training efficiency using information from . The answer will maintain scientific accuracy by citing specific findings and include a properly formatted reference section.
+
+Certainly. I will analyze how monolingual models perform on reasoning tasks across different languages and assess the impact on their efficiency. The main contents of the report are as follows:
+
+Methodology and Scope: Provides the framework for analyzing monolingual reasoning models.
+
+Performance Disparities (RQ1): Details how reasoning accuracy varies with language resources and method.
+
+Efficiency Considerations (RQ2): Examines computational costs and training resource efficiency.
+
+Summary and Recommendations: Synthesizes findings and suggests future directions.
+
+References: Lists academic sources cited in the analysis.
+
+Monolingual Model Performance on Reasoning Tasks: A Language- and Efficiency-Centric Analysis
+1 Methodology and Scope
+This report provides a focused analysis of monolingual reasoning models, also known as Large Reasoning Models (LRMs). Unlike standard Large Language Models (LLMs) that generate outputs directly, these models produce extensive internal reasoning traces (often called "chain-of-thought") before delivering a final answer . Our analysis is structured around two core research questions concerning the impact of language on performance and efficiency. We define monolingual reasoning models as systems trained predominantly on data from a single language, which nonetheless may be applied to multilingual reasoning tasks through inference-time prompting. A critical distinction is made between high-resource languages (e.g., English, Chinese) with abundant training data, and low-resource languages with limited digital corpora. The findings are synthesized from recent peer-reviewed computational linguistics and machine learning research.
+
+2 RQ1: Performance on Reasoning Tasks Across Languages
+The performance of monolingual models on reasoning tasks is highly dependent on the language of the prompt, with a pronounced gap between high-resource and low-resource languages. This disparity is not merely a matter of vocabulary but is fundamentally tied to the model's internal ability to comprehend and process the logical structure of a problem presented in different languages.
+
+2.1 The Multilingual Reasoning Gap
+Research consistently shows that reasoning models exhibit superior performance in high-resource languages. A primary cause of this performance gap is identified as failures in language understanding. Specifically, when processing input in a lower-resource language, models often struggle to accurately map the semantic and logical meaning of the problem into their internal dominant language representation (typically English). This failure to construct a correct internal representation directly leads to errors in the subsequent reasoning trace and final answer . This finding suggests that for many monolingual models, effective reasoning is contingent on a prior, successful translation of the problem into a language space the model has mastered during training.
+
+2.2 Variation by Reasoning Method
+The type of reasoning method used significantly mediates the language-dependent performance gap. Studies comparing Chain-of-Thought (CoT), which uses natural language reasoning steps, with Program-Aided Language (PAL) models, which generate programmatic code (like Python) as reasoning, reveal a key difference:
+
+Chain-of-Thought (CoT): Its effectiveness is strongly tied to language resources. CoT performance is significantly more accurate in high-resource languages compared to low-resource ones. This is because CoT relies on the model's fluency in the prompt's natural language to generate coherent, logical steps .
+
+Program-Aided Language (PAL): The structured, code-like syntax of PAL demonstrations provides a form of linguistic bridge. This structure facilitates comprehension across languages, allowing models to generate correct programmatic solutions even for prompts in low-resource languages. Consequently, the performance gap between high- and low-resource languages is markedly smaller for PAL than for CoT .
+
+This indicates that the linguistic demands of the reasoning method itself are a major factor in determining how severely performance degrades in lower-resource contexts.
+
+2.3 The Strategic Role of Language Mixing
+An emergent and counterintuitive finding from bilingual (e.g., Chinese-English) reasoning models offers a profound insight: enforced monolingual reasoning can be suboptimal. State-of-the-art models trained with Reinforcement Learning from Verifiable Rewards (RLVR) often engage in strategic language mixing (code-switching) within their reasoning traces.
+
+Performance Degradation with Enforcement: Artificially constraining these models to reason purely in the language of the prompt can decrease accuracy. For instance, one study found that enforcing monolingual decoding reduced accuracy by 5.6 percentage points on mathematical reasoning tasks .
+
+Causal Benefit: This behavior is not an artifact but a causally beneficial strategy. Language mixing allows the model to leverage lexical or conceptual efficiencies from different languages, potentially reducing internal "cognitive load" and streamlining the path to a solution. This suggests that optimal reasoning may be inherently multilingual at the process level, even for a task presented in one language .
+
+3 RQ2: Impact on Model Efficiency
+Language affects model efficiency in two primary dimensions: the computational cost during inference (how many resources are needed to solve a problem) and the data efficiency during training (how performance scales with language-specific resources).
+
+3.1 Inference Efficiency and Computational Cost
+The core efficiency challenge for reasoning models is their consumption of inference-time compute, primarily driven by the length of the generated chain-of-thought. Long reasoning traces incur high costs due to the quadratic scaling of attention and the linear growth of memory (KV cache) in transformer architectures .
+
+Dynamic Compute Allocation: A primary method for improving inference efficiency is training models to dynamically allocate compute based on problem complexity. Through reinforcement learning (RL) objectives that reward shorter reasoning chains for simple problems, models learn to "think" longer only when necessary. For example, one efficient training method achieved a 50% reduction in generated tokens on the GSM8K math benchmark while maintaining accuracy . This demonstrates that language-based reasoning efficiency can be directly optimized.
+
+Efficiency of Selective Translation: Addressing the multilingual gap also has efficiency implications. The "Selective Translation" strategy—where an input is translated to a high-resource language only when a failure in understanding is detected—bridges the performance gap while using translation for only about 20% of inputs. This approach achieves near the performance of full translation at a fraction of the computational cost, making cross-lingual reasoning more efficient .
+
+Table: Impact of Efficiency Methods on Reasoning Models
+
+Efficiency Method	Core Principle	Demonstrated Impact	Primary Source
+Dynamic Compute Allocation	RL to shorten CoT for simple problems	30-50% token reduction on math benchmarks	
+Selective Translation	Translate only on understanding failure	Matches full-translation performance using ~20% of translations	
+Probe-Guided Language Switching	Guide beneficial code-switches during decoding	Increased accuracy by up to 6.25 percentage points	
+3.2 Training Resource Efficiency
+The relationship between language resources and model performance highlights a critical data efficiency concern.
+
+Diminishing Returns in High-Resource Languages: Scaling performance in dominant languages like English increasingly requires massive computational investment for diminishing returns, shifting focus towards architectural and algorithmic innovations like efficient reasoning training .
+
+Low Efficiency in Low-Resource Languages: For low-resource languages, the core issue is the scarcity of high-quality training data for complex reasoning. Models cannot learn effective reasoning patterns in these languages due to a lack of examples, making them highly data-inefficient in these contexts. The observed performance gap is a direct manifestation of this training data inequality .
+
+4 Final Summary and Recommendations
+4.1 Summary of Key Findings
+Performance is Language-Dependent: A significant multilingual reasoning gap exists. Monolingual models perform markedly better on reasoning tasks presented in high-resource languages compared to low-resource ones. This gap is primarily driven by failures in cross-lingual understanding at the model's internal representation level .
+
+Reasoning Method Matters: The gap is most severe for natural language-based reasoning methods like Chain-of-Thought. Methods leveraging structured representations (e.g., code generation with PAL) are more robust across languages, suffering a smaller performance drop .
+
+Strategic Multilinguality Enhances Performance: For proficient bilingual models, enforced monolingual reasoning can hamper accuracy. The emergent strategy of language mixing (code-switching) within the reasoning trace is a causally beneficial behavior that improves outcomes, suggesting optimal reasoning may not be monolingual .
+
+Efficiency is Optimizable but Tied to Resources: Inference efficiency (computational cost) can be directly improved by training models to generate shorter, adaptive reasoning chains . However, training efficiency is intrinsically linked to language resources, with low-resource languages suffering from a fundamental scarcity of data needed to learn complex reasoning skills efficiently .
+
+4.2 Recommendations for Future Work
+Develop Cross-Lingual Understanding Metrics: Move beyond final-answer accuracy to develop benchmarks and probes that directly measure a model's internal semantic understanding of a problem across languages. This is crucial for diagnosing and mitigating the root cause of the reasoning gap .
+
+Promote Structured Reasoning for Low-Resource Settings: For applications involving lower-resource languages, prioritize the development and use of reasoning methods that rely on structured, language-agnostic representations (like code, formal logic, or standardized schemas) over purely natural language reasoning .
+
+Research Adaptive and Strategic Language Use: Instead of enforcing strict monolingualism, explore training paradigms and decoding strategies that allow models to strategically select linguistic representations (including code-switching) to optimize both accuracy and reasoning efficiency .
+
+Focus on Data-Centric Solutions for Equity: Truly closing the multilingual reasoning gap requires a data-centric approach. This includes curating high-quality reasoning datasets for low-resource languages and developing data-efficient training techniques that can build robust reasoning capabilities from limited examples.
+
+5 References
+Kang, D., et al. (2025). Why Do Multilingual Reasoning Gaps Emerge in Reasoning Language Models? arXiv preprint arXiv:2510.27269. This paper identifies failures in language understanding as the primary cause of performance disparities and proposes the efficient "Selective Translation" mitigation strategy.
+
+Arora, D., & Zanette, A. (2025). Training Language Models to Reason Efficiently. arXiv preprint arXiv:2502.04463v1. This work introduces reinforcement learning methods to train reasoning models to dynamically allocate inference-time compute, significantly improving efficiency.
+
+Ranaldi, L., Haddow, B., & Birch, A. (2025). When natural language is not enough: The limits of in-context learning demonstrations in multilingual reasoning. In Findings of the Association for Computational Linguistics: NAACL 2025. This study empirically demonstrates that the effectiveness of Chain-of-Thought and Program-Aided Language reasoning varies significantly across languages.
+
+Lespiau, F., & Tricot, A. (2024). Reasoning More Efficiently with Primary Knowledge Despite Cognitive Load. Evolutionary Psychology. Provides a cognitive science framework on how content familiarity ("primary knowledge") affects reasoning efficiency, relevant to model interpretability.
+
+Liner. (2023). Not All Languages Are Created Equal in LLMs. [Review of Improving Multilingual Capability by Cross-Lingual-Thought Prompting]. A review of a key paper on prompting techniques for multilingual reasoning.
+
+Qu, X., et al. (2025). A Survey of Efficient Reasoning for Large Reasoning Models. *GitHub Repository / arXiv preprint arXiv:2503.21614*. A comprehensive survey cataloging methods and challenges for improving the efficiency of large reasoning models.
+
+Białek, M., et al. (2020). Thinking in a foreign language distorts allocation of cognitive effort: Evidence from reasoning. Cognition, 205. A foundational cognitive science study on the "Foreign Language Effect," showing reduced reasoning accuracy in a non-native language due to weakened conflict detection.
+
+Dasgupta, I., et al. (2024). Language models, like humans, show content effects on reasoning. PNAS Nexus, 3(7). Demonstrates that both humans and LLMs reason more accurately when semantic content supports logical inferences, paralleling the role of familiar training data.
+
+Li, Y., et al. (2025). The Impact of Language Mixing on Bilingual LLM Reasoning. arXiv preprint arXiv:2507.15849v1. Provides evidence that language mixing (code-switching) in the reasoning chain of bilingual models is a strategic behavior that causally improves accuracy.

@@ -1,0 +1,86 @@
+1. Does training language change reasoning performance?
+
+Strict, perfectly controlled comparisons of monolingual LLMs trained on different languages (same architecture, same data size, different language only) are still rare. But several lines of evidence from multilingual evaluation and analysis of English-centric models give a fairly consistent picture:
+	1.	Performance tracks data quantity/quality, not “innate” language logic.
+Multilingual benchmarks like MGSM (Multilingual Grade School Math) show that a single underlying model can reach quite strong reasoning performance in many languages, but accuracy systematically varies with how well the language is represented in pre-training data. Languages that are more frequent in pre-training (often English, then other high-resource languages like French, German, Spanish) obtain higher math and commonsense reasoning scores. ￼
+This suggests that if you trained separate monolingual models with the same architecture and compute but different languages, you should expect performance gaps largely because the available high-quality data and domain coverage differ between those languages.
+	2.	Monolingual models generally outperform multilingual ones in their own language.
+Work on the “curse of multilinguality” shows that when you cram many languages into one model, each language loses some capacity compared with a dedicated monolingual model trained on that language. ￼
+This indirectly supports the idea that, given enough data, a monolingual model in (say) German can be as good at reasoning in German as an English model is in English – but only if the training data is comparable in scale and quality.
+	3.	Internal reasoning ability is mostly language-agnostic; expression is language-specific.
+MGSM and related work also show that using English chain-of-thought to solve problems posed in other languages often works as well or better than reasoning entirely in the target language. ￼
+This indicates that the “reasoning machinery” learned by large models is not tightly bound to one language. However, how well this reasoning shows up when the model has to read and write in a particular language still depends on how well that language is represented in its tokenizer and training data.
+
+So, do monolingual models perform differently by training language?
+Yes, but mainly because of ecosystem factors:
+	•	Availability of high-quality reasoning-style data (math solutions, stepwise explanations, code, etc.).
+	•	Coverage of relevant domains (science, law, medicine) in that language.
+	•	How well the tokenizer and training objective represent that language’s script and morphology.
+
+There is no strong empirical support for one natural language being inherently “better for reasoning” in a way that would make a carefully matched monolingual model intrinsically more logical just because it’s trained in that language. The observed differences are largely data and representation driven, not “language-of-thought” magic.
+
+⸻
+
+2. Does the training language affect efficiency?
+
+Here “efficiency” can mean a few different things:
+	•	Computational efficiency: FLOPs and latency per input/output.
+	•	Context efficiency: how much information fits into a fixed context window.
+	•	Utility efficiency: how much performance you get per unit of compute or per few-shot example.
+
+Language does matter for all three, via tokenization and script.
+	1.	Tokenization length differences → compute and cost differences.
+Studies of tokenization across many languages show that the same message can require up to ~5–10× more tokens in some languages than in others when using common subword or byte-pair tokenizers. ￼
+	•	Languages whose scripts align well with the tokenizer’s vocabulary (often English and other high-resource Latin-script languages) get shorter sequences, so each request costs fewer tokens and runs faster.
+	•	Languages that are poorly covered or written in complex scripts (e.g., certain low-resource or abugida/abjad scripts) are more heavily fragmented into subwords or bytes, leading to more tokens for the same semantic content.
+For generative models that operate strictly token-by-token, this means:
+Same reasoning task + different language → different token counts → different runtime and monetary cost.
+	2.	Evidence that fragmentation harms in-context learning utility.
+Ahia et al. (2023) explicitly show that languages with higher tokenization fragmentation not only pay higher API costs but also see worse in-context learning performance on tasks like NLI, QA, and summarization. ￼
+In other words, less efficient tokenization leads to both higher compute and lower “reasoning-per-token” utility.
+	3.	Low-resource languages are slower and less efficient under English-centric tokenizers.
+A recent study on tokenization efficiency for Ukrainian shows that foundational models trained mostly on English become slower and more expensive when used for Ukrainian: the tokenizer allocates fewer dedicated subwords to Ukrainian, leading to longer sequences and higher computation for the same character length. ￼
+The authors also note that re-optimizing tokenizers for the target language or using transliteration can significantly improve efficiency.
+	4.	Implications for monolingual models.
+For truly monolingual models, the tokenizer is usually optimized for exactly one language. That brings two consequences:
+	•	Within that language, monolingual models are usually more efficient (shorter sequences, better coverage) than a shared multilingual tokenizer.
+	•	Across languages, if you compare two monolingual models for two different languages, efficiency will differ if one language can be encoded more compactly than the other (e.g., due to script density or morphology), even if architectures and sequence lengths are identical.
+
+So yes: the choice of training language strongly affects efficiency, mainly through tokenization and how much information fits into a fixed number of tokens, which in turn affects runtime, cost, and how many examples you can fit into the context.
+
+⸻
+
+3. Putting it together
+	•	Reasoning performance
+	•	Depends heavily on data scale/quality and domain coverage in the training language, and less on any inherent logical superiority of that language. ￼
+	•	Monolingual models can achieve excellent reasoning in their language, but real-world gaps arise because English and a few other languages have much richer curated datasets.
+	•	Efficiency
+	•	Is strongly influenced by tokenization and script: languages that tokenize to fewer subwords per sentence are cheaper and faster; highly fragmented languages pay more per unit of meaning and often see weaker in-context reasoning. ￼
+
+⸻
+
+References
+	1.	Shi, F. et al. (2022). Language Models are Multilingual Chain-of-Thought Reasoners.
+Introduces the MGSM benchmark and shows how reasoning accuracy varies across languages and correlates with language frequency in pre-training data, and that English CoT often transfers well to other languages. ￼
+	2.	Ahia, O. et al. (2023). Do All Languages Cost the Same? Tokenization in the Era of Large Language Models. EMNLP.
+Analyses tokenization fragmentation across many languages for LLM APIs, showing up to 5× token length differences for equivalent content and demonstrating that high fragmentation both increases cost and reduces in-context learning utility. ￼
+	3.	Maksymenko, D. & Turuta, O. (2025). Tokenization efficiency of current foundational large language models for the Ukrainian language. Frontiers in Artificial Intelligence.
+Shows that English-centric tokenizers lead to longer sequences, higher compute, and reduced efficiency for Ukrainian, and that language-aware tokenization can mitigate these issues. ￼
+	4.	Blevins, T. (2024). Multilingual Language Models: Analysis and Algorithms. PhD Thesis, University of Washington.
+Discusses the curse of multilinguality, showing that multilingual models tend to underperform monolingual ones for each individual language and analysing how pre-training dynamics and data disparities drive cross-lingual performance gaps. ￼
+	5.	Jun, Y. (2023). All Languages Are NOT Created (Tokenized) Equal. TDS Archive (Medium).
+A practitioner-oriented overview illustrating how the same sentences in different languages can require drastically different token counts, highlighting practical cost and latency disparities across languages. ￼
+
+⸻
+
+Final Summary and Recommendation
+	•	Short answer:
+	•	Yes, monolingual models do perform differently on reasoning tasks depending on the language, but mainly because of data availability and tokenizer design, not because some languages are inherently more “logical.”
+	•	And yes, the training language clearly affects efficiency through tokenization length and coverage, which change both runtime and context-usage efficiency.
+	•	For your coursework project, a reasonable recommendation is:
+
+	1.	If your target user base is concentrated in one language with good data (e.g. English, maybe one major European language), a monolingual model with a language-optimized tokenizer is likely to be both more accurate and more efficient than a comparable multilingual alternative.
+	2.	If you need to support many languages, especially low-resource ones, consider:
+	•	Designing or adopting language-aware tokenizers (or per-language tokenizers) to reduce fragmentation.
+	•	Allocating extra capacity or curriculum-style training for low-resource languages to offset data and efficiency disadvantages.
+	3.	When comparing models “by language”, be explicit that observed differences in reasoning performance and efficiency reflect data and tokenization biases, not intrinsic differences in the languages themselves. This framing is important both scientifically and ethically.

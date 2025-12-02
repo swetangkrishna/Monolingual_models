@@ -1,0 +1,69 @@
+Hmm, the user is working on a university coursework project and needs analytical help answering two research questions. They specifically want the output formatted for evaluating linguistic clarity, scientific accuracy, and reference quality. This looks like a serious academic exercise.
+
+Well, I need to answer two research questions about how lexical gaps between languages impact models' reasoning abilities, and I need to provide references and a summary. The prompt gives specific formatting instructions that must be followed exactly.
+
+I plan to structure this with a clear research question section, then move to the core impact analysis, followed by references in proper academic format, and finally a summary with recommendations. The analysis needs to be thorough but clear, with solid citations from the search results.
+
+Looking at these search results, I can see several highly relevant and authoritative sources.  provides excellent peer-reviewed research specifically about multilingual reasoning gaps in reasoning language models, giving me the core scientific foundation.  offers solid analysis of performance gaps in cross-lingual transfer.  is a comprehensive survey from a major conference that adds weight to the theoretical understanding.  provides practical research on bridging resource gaps with concrete methodology.
+
+ comes from a Medium blog, which makes it less authoritative for academic work, though it might have some useful contextual information.  is similar - a blog post rather than peer-reviewed research, so I should be cautious with it.  is more policy-focused from an advocacy organization, which gives useful real-world context but isn't primary research.  and  are strong peer-reviewed papers that add specific dimensions to the analysis.
+
+I will use these higher-quality sources as the foundation and reference them appropriately. For the analysis, I can build a framework around primary and secondary impacts, citing specific findings from the key papers. I can create a table summarizing the mechanisms to help organize the information clearly.
+
+The references need to be formatted properly, and the summary should tie everything together with practical recommendations. The user wants something they can use for evaluation, so clarity and proper citation will be particularly important.
+
+Answers to Research Questions
+RQ1: How does lexical gap between languages impact the reasoning abilities of models?
+Lexical gaps—disparities in vocabulary, syntactic structures, and available training data between languages—fundamentally degrade the reasoning abilities of language models. This impact is not uniform but creates a systematic multilingual reasoning gap, where models perform significantly better in high-resource languages (e.g., English) compared to low-resource ones. The core issue is that reasoning is not language-agnostic; models rely on linguistic understanding as a prerequisite for logical deduction.
+
+The impact manifests through two primary mechanisms: primary failures in language understanding and secondary degradation of reasoning quality.
+
+1. Primary Impact: Failure in Cross-Lingual Understanding
+The most direct impact is the model's failure to accurately map the meaning of an input in a low-resource language into its internal reasoning process, which is typically dominated by a high-resource language like English. Reasoning Language Models (RLMs) often work by first interpreting a query into a dominant language within their reasoning trace before generating a final answer in the original language. Lexical and structural gaps cause "understanding failures" at this first stage, where the model misrepresents the problem's semantics. A seminal study found that these understanding failures are the dominant source of the multilingual reasoning gap, accounting for more performance degradation than errors in the core reasoning or answer generation stages. When the model misunderstands the question, any subsequent reasoning is fundamentally flawed.
+
+2. Secondary Impact: Degraded Reasoning Chain Quality
+Even when the basic meaning is preserved, lexical gaps lead to shallower, less reliable reasoning. Research comparing model performance on African American English (AAE) and Standard American English (SAE) found that for AAE inputs, models not only produced less accurate answers but also generated simpler, less detailed reasoning chains and explanations. This suggests that limited exposure to a language variety impoverishes the model's ability to engage in complex, step-by-step problem-solving within that linguistic framework. The model's internal representations for lower-resource languages are less capable of supporting robust logical operations.
+
+Underlying Causes and Exacerbating Factors:
+These impacts are driven and worsened by several interconnected factors:
+
+The Resourcedness Gap: Vast inequalities in the volume and quality of digital text create a fundamental data scarcity for low-resource languages. Models cannot learn robust representations for languages or concepts they have rarely seen.
+
+The Curse of Multilinguality: There is a trade-off in model capacity; improving performance on one language can come at the cost of performance on another, especially as more languages are added to a single model.
+
+Ineffective Cross-Lingual Transfer: While models can be fine-tuned on a source language and show some capability in non-source languages, a significant performance gap persists. Knowledge and reasoning patterns do not transfer seamlessly across lexical boundaries.
+
+Brittleness to Dialect and Variation: Performance disparities are evident not only between distinct languages but also between dialects of the same language (e.g., AAE vs. SAE), indicating that models encode linguistic hierarchies that mirror social biases.
+
+Table: Summary of Impact Mechanisms
+
+Mechanism	Description	Consequence for Reasoning
+Understanding Failure	Inaccurate internal translation of the input problem.	Reasoning is applied to a misinterpreted problem, leading to incorrect answers.
+Reasoning Chain Degradation	Generation of simpler, less coherent step-by-step logic.	Problem-solving is less robust, transparent, and reliable.
+Knowledge Transfer Barrier	Inability to apply facts/logic learned in one language to another.	Model "knows" the answer in a high-resource language but cannot access it when queried otherwise.
+Compounded Hallucination	Tendency to generate plausible but incorrect or irrelevant content.	Erroneous facts are woven into flawed reasoning, reducing trustworthiness.
+In conclusion, lexical gaps do not merely cause translation errors; they compromise the foundational understanding and execution of reasoning itself. This results in models that are less accurate, less explainable, and inequitable in their cognitive capabilities across the world's languages.
+
+References
+Kang, D., Hwang, S., Kim, D., Kim, H., & Lee, G. G. (2025). Why Do Multilingual Reasoning Gaps Emerge in Reasoning Language Models? arXiv preprint. https://doi.org/10.48550/arXiv.2510.27269[citation:1]
+
+Zhou, R., Wan, G., Gabriel, S., Li, S., Gates, A. J., Sap, M., & Hartvigsen, T. (2025). Disparities in LLM Reasoning Accuracy and Explanations: A Case Study on African American English. arXiv preprint. https://doi.org/10.48550/arXiv.2503.04099[citation:9]
+
+Guo, Y., et al. (2023). Analyzing and Reducing the Performance Gap in Cross-Lingual Transfer with Fine-tuning Slow and Fast. Proceedings of ACL 2023. https://doi.org/10.48550/arXiv.2305.11449[citation:4]
+
+Resck, L., Augenstein, I., & Korhonen, A. (2025). Explainability and Interpretability of Multilingual Large Language Models: A Survey. Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing (EMNLP), 20465–20497. https://aclanthology.org/2025.emnlp-main.1033/[citation:3]
+
+Author(s). (2025). Bridging resource gaps in cross-lingual sentiment analysis. PeerJ Computer Science, 11, e2851. https://doi.org/10.7717/peerj-cs.2851[citation:8]
+
+Final Summary and Recommendation
+Summary:
+The investigation confirms that lexical and resource gaps between languages critically impair the reasoning abilities of language models. The primary failure point is inaccurate cross-lingual understanding, where a model misinterprets a problem posed in a low-resource language at the initial stage of processing. This is compounded by a secondary degradation in the quality of reasoning chains, making logic less coherent and explainable. These issues are systemic, rooted in training data imbalances (the "resourcedness gap") and architectural trade-offs (the "curse of multilinguality"), leading to pervasive performance disparities that extend even to dialectal variations within a language.
+
+Recommendation:
+To develop models with more equitable reasoning abilities, a two-pronged strategy is recommended:
+
+Invest in Strategic Data and Architectural Solutions: Priorities should include creating high-quality, reasoning-focused datasets for low-resource languages and developing specialized, modular model architectures (e.g., language-adaptive layers) that can efficiently serve diverse languages without the severe trade-offs of monolithic models. Techniques like Selective Translation—where inputs are translated only when a failure in understanding is detected—demonstrate that targeted, efficient interventions can significantly bridge performance gaps.
+
+Adopt a Community-Centric and Transparent Development Ethos: Technical solutions must be guided by inclusivity. This involves partnering with and investing in local language communities to ensure cultural and linguistic authenticity. Furthermore, rigorous transparency regarding model capabilities, limitations, and training data composition for each language is non-negotiable for ethical deployment and effective accountability.
+
+Ultimately, achieving equitable multilingual reasoning requires moving beyond treating language as a mere surface feature and instead addressing the deep representational inequalities within AI systems.
