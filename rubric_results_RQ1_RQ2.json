@@ -3,12 +3,12 @@
     "gpt-5.1": {
       "linguistic_clarity": {
         "words_per_sentence": 9.987804878048781,
-        "jargon_per_sentence": 0.2926829268292683,
+        "jargon_per_sentence": 0.0,
         "flesch_reading_ease": 28.478696730099188,
-        "connectors_per_sentence": 0.39634146341463417
+        "connectors_per_sentence": 0.0
       },
       "scientific_accuracy": {
-        "quasi_definitions_per_answer": 0,
+        "quasi_definitions_per_answer": 1,
         "bias_markers_per_answer": 0,
         "cosine_similarity_q_a": 0.2951676132706148
       },
@@ -21,9 +21,9 @@
     "deepseek-R1": {
       "linguistic_clarity": {
         "words_per_sentence": 11.317073170731707,
-        "jargon_per_sentence": 0.056910569105691054,
+        "jargon_per_sentence": 0.0,
         "flesch_reading_ease": 26.148170731707353,
-        "connectors_per_sentence": 0.4146341463414634
+        "connectors_per_sentence": 0.0
       },
       "scientific_accuracy": {
         "quasi_definitions_per_answer": 0,
@@ -31,37 +31,19 @@
         "cosine_similarity_q_a": 0.3529659893218757
       },
       "references": {
-        "hallucinated_citations_per_answer": 0,
+        "hallucinated_citations_per_answer": 5,
         "source_quality_score": 0.0,
         "recency_score": 0.0
       }
     }
   },
   "RQ2": {
-    "gpt-5.1": {
-      "linguistic_clarity": {
-        "words_per_sentence": 13.086538461538462,
-        "jargon_per_sentence": 0.5576923076923077,
-        "flesch_reading_ease": 27.398012102243825,
-        "connectors_per_sentence": 0.6730769230769231
-      },
-      "scientific_accuracy": {
-        "quasi_definitions_per_answer": 0,
-        "bias_markers_per_answer": 0,
-        "cosine_similarity_q_a": 0.37808917631809513
-      },
-      "references": {
-        "hallucinated_citations_per_answer": 0,
-        "source_quality_score": 0.0,
-        "recency_score": 0.0
-      }
-    },
     "deepseek-R1": {
       "linguistic_clarity": {
         "words_per_sentence": 13.601307189542483,
-        "jargon_per_sentence": 0.5032679738562091,
+        "jargon_per_sentence": 0.0,
         "flesch_reading_ease": 17.203147493820524,
-        "connectors_per_sentence": 0.3333333333333333
+        "connectors_per_sentence": 0.006535947712418301
       },
       "scientific_accuracy": {
         "quasi_definitions_per_answer": 0,
@@ -69,7 +51,7 @@
         "cosine_similarity_q_a": 0.3779478352285338
       },
       "references": {
-        "hallucinated_citations_per_answer": 0,
+        "hallucinated_citations_per_answer": 1,
         "source_quality_score": 0.0,
         "recency_score": 0.0
       }
