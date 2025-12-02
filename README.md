@@ -50,6 +50,6 @@ DEBUG = False
 - Change connector list  
 - Add reference metadata  
 
-## License
-
-MIT License.
+## Authors
+Swetang Krishna
+Yannis Belkhiter
