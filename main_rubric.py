@@ -17,7 +17,7 @@ from scientific_accuracy import (
 from references_checks import (
     ReferenceMetadata,
     ReferenceScores,
-    evaluate_references,
+    evaluate_answer_text,
 )
 
 DEBUG = True
@@ -41,7 +41,7 @@ ANSWER_FILES = {
          "deepseek-R1": "deepseek-R1(RQ1).txt",
      },
      "RQ2": {
-         "gpt-5.1": "answers/gpt-5.1(RQ2).txt",
+         "gpt-5.1": "gpt-5.1(RQ2).txt",
          "deepseek-R1": "deepseek-R1(RQ2).txt",
      },
 }
@@ -102,7 +102,7 @@ class RubricEvaluator:
 
         if DEBUG:
             print("[main_rubric] -> references")
-        refs = evaluate_references(answer, self.reference_db)
+        refs = evaluate_answer_text(answer)
 
         if DEBUG:
             print("[main_rubric] RubricEvaluator.evaluate DONE")
